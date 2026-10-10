@@ -16,6 +16,10 @@ async fn handle_connection(mut socket: TcpStream, engine: std::sync::Arc<Engine>
 
         let mut data = bytes::Bytes::copy_from_slice(&buf[..n]);
         
+        // Phase 3: Integration of Traffic Analysis
+        let report = crate::analysis::analyzer::TrafficAnalyzer::analyze_payload(&data);
+        tracing::info!("Traffic Report: {:?}", report);
+
         if engine.process_request(&mut data).await? {
             socket.write_all(&data).await?;
         }
