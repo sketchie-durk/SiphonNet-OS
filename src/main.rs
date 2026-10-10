@@ -35,6 +35,12 @@ async fn main() -> Result<()> {
     // Phase 2: Plugin Integration
     engine.add_plugin(crate::plugins::siphon::PacketSiphon::new(b"GET"));
     
+    // Phase 4: Core Plugin Suite
+    engine.add_plugin(crate::plugins::core_plugins::LogPlugin {
+        log_file: "siphon_traffic.log".to_string(),
+    });
+    engine.add_plugin(crate::plugins::core_plugins::CompressionPlugin);
+    
     let engine_arc = std::sync::Arc::new(engine);
     let listener = TcpListener::bind("127.0.0.1:8080").await?;
     
