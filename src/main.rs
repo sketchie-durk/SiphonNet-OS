@@ -28,7 +28,8 @@ async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
     let mut engine = Engine::new();
     
-    // We will add plugins in Phase 2
+    // Phase 2: Plugin Integration
+    engine.add_plugin(crate::plugins::siphon::PacketSiphon::new(b"GET"));
     
     let engine_arc = std::sync::Arc::new(engine);
     let listener = TcpListener::bind("127.0.0.1:8080").await?;
